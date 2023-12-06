@@ -24,6 +24,26 @@
       "title": "Политика за поверителност",
       "description": "---",
       "keywords": "---"
+    },
+    "/admin": {
+      "title": "Admin",
+      "description": "---",
+      "keywords": "---"
+    },
+    "/admin/login": {
+      "title": "Admin Login",
+      "description": "---",
+      "keywords": "---"
+    },
+    "/admin/surveys": {
+      "title": "Surveys",
+      "description": "---",
+      "keywords": "---"
+    },
+    "/admin/surveys/new": {
+      "title": "New Survey",
+      "description": "---",
+      "keywords": "---"
     }
   },
   "forms": {
@@ -689,7 +709,7 @@
           "five": "Не са постъпвали такива пациенети"
         }
       },
-      "00072": {
+      "00075": {
         "label": "На колко от тях препоръчахте Тусидрен?",
         "options": {
           "one": "Под 10",

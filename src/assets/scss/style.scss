@@ -5,6 +5,10 @@ Version:	1.0.0
 Author:		ui-lib
 */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Bootstrap Functions
 // @import '/bootstrap/scss/functions';
 @import '../../../node_modules/bootstrap/scss/functions';

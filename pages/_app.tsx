@@ -8,6 +8,7 @@ import TranslatorContext from 'modules/translator/TranslatorContext';
 
 // Bootstrap and custom scss
 import 'assets/scss/style.scss';
+import 'assets/global.css';
 // animate css
 import 'animate.css';
 // import swiper css
@@ -101,6 +102,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     if (['/terms-and-conditions'].includes(pathname)) {
+      return;
+    }
+    if (['/admin'].includes(pathname)) {
+      return;
+    }
+    if (['/admin/login'].includes(pathname)) {
+      return;
+    }
+    if (['/admin/surveys'].includes(pathname)) {
+      return;
+    }
+    if (['/admin/surveys/new'].includes(pathname)) {
       return;
     }
     if (user === null) {

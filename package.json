@@ -11,15 +11,19 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
+    "@vercel/postgres": "^0.5.1",
     "animate.css": "^4.1.1",
+    "axios": "^1.6.2",
     "bootstrap": "^5.2.0",
     "clipboard": "^2.0.11",
+    "cookie": "^0.6.0",
     "dayjs": "^1.11.4",
     "firebase": "^9.19.1",
     "flat": "^5.0.2",
     "glightbox": "^3.2.0",
     "isotope-layout": "^3.0.6",
     "itooltip": "^1.1.1",
+    "jsonwebtoken": "^9.0.2",
     "next": "12.2.3",
     "nodemailer-react": "^1.0.2",
     "plyr-react": "^5.1.0",
@@ -44,9 +48,13 @@
     "@types/react-dom": "18.0.6",
     "@types/react-scroll": "^1.8.4",
     "@types/react-syntax-highlighter": "^15.5.5",
+    "autoprefixer": "^10.4.16",
+    "daisyui": "^4.4.19",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",
+    "postcss": "^8.4.32",
     "sass": "^1.54.0",
+    "tailwindcss": "^3.3.6",
     "typescript": "4.7.4"
   }
 }
