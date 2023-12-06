@@ -13,18 +13,7 @@ export default function Admin() {
       .get('/api/admin/authenticated')
       .then((response) => {
         if (!response.data.authenticated) {
-          Router.push('/admin/login');useEffect(() => {
-            axios
-              .get('/api/admin/authenticated')
-              .then((response) => {
-                if (!response.data.authenticated) {
-                  Router.push('/admin/login');
-                } else {
-                }
-              })
-              .catch(() => Router.push('/admin/login'));
-          }, []);
-        } else {
+          Router.push('/admin/login');
         }
       })
       .catch(() => Router.push('/admin/login'));
