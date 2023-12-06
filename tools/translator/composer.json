@@ -1,0 +1,13 @@
+{
+    "name": "smart-take/translator",
+    "authors": [
+        {
+            "name": "Simeon Hristov",
+            "email": "s.hristov@smart-take.com"
+        }
+    ],
+    "require": {
+        "viniciusgava/google-translate-api": "^3.0",
+        "ext-json": "*"
+    }
+}
