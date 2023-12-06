@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Navbar() {
   return (
     <div className="navbar bg-base-100">
@@ -16,7 +18,7 @@ export default function Navbar() {
           </div>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
             <li>
-              <a href="/admin/surveys">Surveys</a>
+              <Link href="/admin/surveys">Surveys</Link>
             </li>
             {/* <li>
                 <a>Parent</a>
@@ -30,7 +32,7 @@ export default function Navbar() {
                 </ul>
               </li> */}
             <li>
-              <a href="/admin/users">Users</a>
+              <Link href="/admin/users">Users</Link>
             </li>
           </ul>
         </div>
@@ -38,7 +40,7 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a href="/admin/surveys">Surveys</a>
+            <Link href="/admin/surveys">Surveys</Link>
           </li>
           {/* <li>
               <details>
@@ -54,7 +56,7 @@ export default function Navbar() {
               </details>
             </li> */}
           <li>
-            <a href="/admin/users">Users</a>
+            <Link href="/admin/users">Users</Link>
           </li>
         </ul>
       </div>

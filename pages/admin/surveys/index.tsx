@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from 'components/admin/Navbar';
 import Router from 'next/router';
+import Link from 'next/link';
 
 export default function Admin() {
   const [forms, setForms] = useState([]);
@@ -34,7 +35,7 @@ export default function Admin() {
       <Navbar />
       {/* Render the forms here */}
         <div >
-            <a href="/admin/surveys/new" className='btn btn-primary mt-2'>New Form</a>
+            <Link href="/admin/surveys/new" className='btn btn-primary mt-2'>New Form</Link>
           <div className="overflow-x-auto">
             <table className="table">
               <thead>
@@ -53,7 +54,7 @@ export default function Admin() {
                     {/* @ts-ignore */}
                     <td>{form.title}</td>
                     {/* @ts-ignore */}
-                    <td><a className='link' href={`/admin/surveys/${form.formid}`}>View more</a></td>
+                    <td><Link className='link' href={`/admin/surveys/${form.formid}`}>View more</Link></td>
                   </tr>
                 ))}
               </tbody>
