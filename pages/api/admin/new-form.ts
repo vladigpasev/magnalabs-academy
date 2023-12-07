@@ -1,5 +1,9 @@
 import { sql } from '@vercel/postgres';
 import type { NextApiRequest, NextApiResponse } from 'next';
+//@ts-ignore
+import jwt from 'jsonwebtoken';
+//@ts-ignore
+import cookie from 'cookie';
 
 interface Option {
   value: string;
@@ -19,7 +23,19 @@ interface Form {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Check for authentication
-  const isAuthenticated = true; // Replace this with your actual authentication logic
+  function auth () {
+    try {
+        const cookies = cookie.parse(req.headers.cookie || '');
+        const token = cookies.token;
+        if (!token) throw new Error();
+
+        jwt.verify(token, process.env.JWT_SECRET);
+        return (true);
+    } catch (err) {
+        return (false);
+    }
+}
+const isAuthenticated = auth();
 
   if (!isAuthenticated) {
     return res.status(401).json({ error: 'Unauthorized' });

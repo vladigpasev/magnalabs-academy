@@ -10,14 +10,12 @@ export default function Admin() {
       .then((response) => {
         if (!response.data.authenticated) {
           Router.push('/admin/login');
+        }else{
+          Router.push('/admin/surveys');
         }
       })
       .catch(() => Router.push('/admin/login'));
   }, []);
 
-  return (
-    <div>
-     <Navbar />
-    </div>
-  );
+  return;
 }

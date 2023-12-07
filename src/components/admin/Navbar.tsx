@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
-        <div className="dropdown">
+       {/* <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,7 @@ export default function Navbar() {
             <li>
               <Link href="/admin/surveys">Surveys</Link>
             </li>
-            {/* <li>
+            <li>
                 <a>Parent</a>
                 <ul className="p-2">
                   <li>
@@ -30,14 +30,14 @@ export default function Navbar() {
                     <a>Submenu 2</a>
                   </li>
                 </ul>
-              </li> */}
+              </li> 
             <li>
               <Link href="/admin/users">Users</Link>
             </li>
           </ul>
-        </div>
-      </div>
-      <div className="navbar-center hidden lg:flex">
+  </div> */}
+      </div> 
+      <div className="navbar-center flex">
         <ul className="menu menu-horizontal px-1">
           <li>
             <Link href="/admin/surveys">Surveys</Link>

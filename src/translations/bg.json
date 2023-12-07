@@ -44,6 +44,11 @@
       "title": "New Survey",
       "description": "---",
       "keywords": "---"
+    },
+    "/admin/surveys/[id]": {
+      "title": "Survey Settings",
+      "description": "---",
+      "keywords": "---"
     }
   },
   "forms": {

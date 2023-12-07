@@ -35,7 +35,7 @@ export default function Admin() {
       <Navbar />
       {/* Render the forms here */}
         <div >
-            <Link href="/admin/surveys/new" className='btn btn-primary mt-2'>New Form</Link>
+            <Link href="/admin/surveys/new"><div className='btn btn-primary rounded mt-2'>New Form</div></Link>
           <div className="overflow-x-auto">
             <table className="table">
               <thead>
