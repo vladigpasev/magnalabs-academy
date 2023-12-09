@@ -13,7 +13,7 @@ const LoginPage = (): JSX.Element => {
       await axios.post('/api/admin/login', { username, password });
       Router.push('/admin');
     } catch (error) {
-      alert(error);
+      alert('Wrong username or password.');
     }
   };
 

@@ -47,7 +47,7 @@ const SurveyResponses = () => {
           // Check if the browser allows us to close the window
           try {
             // Wait for a short period to ensure the file starts downloading
-            await new Promise(resolve => setTimeout(resolve, 1000)); // 2 seconds
+            await new Promise(resolve => setTimeout(resolve, 10000)); // 10 seconds
             newWindow.close();
           } catch (e) {
             console.error("Couldn't close the new window automatically:", e);
