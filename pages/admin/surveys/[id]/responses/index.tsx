@@ -40,20 +40,26 @@ const SurveyResponses = () => {
 
     if (isLoading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
 
-    const handleExportClick = async () => {
-        const newWindow = window.open(`/api/admin/export-responses?id=${id}`, '_blank');
+      const handleExportClick = () => {
+        // Create a link element
+        const link = document.createElement('a');
+        
+        // Set the download URL
+        link.href = `/api/admin/export-responses?id=${id}`;
       
-        if (newWindow) {
-          // Check if the browser allows us to close the window
-          try {
-            // Wait for a short period to ensure the file starts downloading
-            await new Promise(resolve => setTimeout(resolve, 10000)); // 10 seconds
-            newWindow.close();
-          } catch (e) {
-            console.error("Couldn't close the new window automatically:", e);
-          }
-        }
+        // You can also set the download attribute to suggest a filename
+        // link.download = 'SurveyResponses.xlsx';
+      
+        // Append the link to the body (it does not have to be visible)
+        document.body.appendChild(link);
+        
+        // Trigger the download
+        link.click();
+      
+        // Clean up by removing the link after initiating the download
+        document.body.removeChild(link);
       };
+      
       
     return (
         <div className="container mx-auto p-4">

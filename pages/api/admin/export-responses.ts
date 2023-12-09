@@ -52,9 +52,9 @@ export default async function handler(req, res) {
     const userData = {};
     rows.forEach(row => {
       const userKey = `${row.user_name} ${row.surname}`;
-      /*@ts-ignore*/
+      //@ts-ignore
       if (!userData[userKey]) {
-        /*@ts-ignore*/
+        //@ts-ignore
         userData[userKey] = {
           firstName: row.user_name,
           lastName: row.surname,
@@ -65,8 +65,16 @@ export default async function handler(req, res) {
           responses: {}
         };
       }
-      /*@ts-ignore*/
-      userData[userKey].responses[row.questiontext] = row.answertext;
+
+      // Group multiple choice answers together
+      //@ts-ignore
+      if (userData[userKey].responses[row.questiontext]) {
+        //@ts-ignore
+        userData[userKey].responses[row.questiontext] += `; ${row.answertext}`;
+      } else {
+        //@ts-ignore
+        userData[userKey].responses[row.questiontext] = row.answertext;
+      }
     });
 
     // Create a new Excel workbook
