@@ -1,13 +1,27 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import axios from 'axios';
 import Navbar from 'components/admin/Navbar';
+import Link from 'next/link';
 
 export default function SurveySettings() {
   const [survey, setSurvey] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {
+    axios
+      .get('/api/admin/authenticated')
+      .then((response) => {
+        if (!response.data.authenticated) {
+          Router.push('/admin/login');
+        } else {
+          return;
+        }
+      })
+      .catch(() => Router.push('/admin/login'));
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -48,6 +62,7 @@ export default function SurveySettings() {
       <div className="max-w-4xl mx-auto p-4 mt-4">
         {/* @ts-ignore */ }
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">{survey.title}</h2>
+        <div className='flex flex-col gap-5 w-fit'>
         <button 
           onClick={handleActivate} 
           /* @ts-ignore */
@@ -57,6 +72,8 @@ export default function SurveySettings() {
         >
           Activate
         </button>
+        <Link href={`/admin/surveys/${id}/responses`}><a className='mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>See responses</a></Link>
+      </div>
         <div className="space-y-4">
             {/* @ts-ignore */}
           {survey.questions.map((question, index) => (

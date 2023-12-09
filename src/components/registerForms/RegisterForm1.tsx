@@ -1,13 +1,11 @@
 import {FC, useContext, useEffect, useState} from 'react';
 import TranslatorContext from '../../modules/translator/TranslatorContext';
-import UserContext, {User} from "../../modules/user/UserContext";
-import {doc, setDoc} from "firebase/firestore";
-import Firestore from "../../modules/firebase/Firestore";
 import NextLink from "../links/NextLink";
+import Router from 'next/router';
+import axios from 'axios';
 
 const RegisterForm1: FC = () => {
   const translator = useContext(TranslatorContext);
-  const { user, setUser } = useContext(UserContext);
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -18,35 +16,51 @@ const RegisterForm1: FC = () => {
   const [terms, setTerms] = useState<boolean>(false);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);
-  const handleSubmit = (event: any) => {
+
+  useEffect(() => {
+    axios
+      .get('/api/authenticated')
+      .then((response) => {
+        if (!response.data.authenticated) {
+          Router.push('/login');
+        } else {
+          if (!response.data.valid) {
+            return;
+          } else {
+            Router.push('/');
+          }
+        }
+      })
+      .catch(() => Router.push('/login'));
+  }, []);
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (user !== null) {
-      setIsAlertSuccess(true);
-      setIsAlertVisible(true);
-      setTimeout(() => {
-        const newUser: User = {
-          username: user.username,
-          password: user.password,
-          firstName,
-          lastName,
-          email,
-          phone,
-          city,
-          pharmacy,
-          uid,
-        };
-        setDoc(doc(Firestore, "users", user.username), newUser, {
-          merge: true,
-        }).then(() => {
-          setUser(newUser);
-        });
-      }, 3000);
-    }
-    else {
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ firstName, lastName, email, phone, city, pharmacy, uid, terms }),
+      });
+
+      if (response.ok) {
+        Router.push('/');
+        setIsAlertSuccess(true);
+        // Optionally, clear the form or redirect the user
+      } else {
+        setIsAlertSuccess(false);
+        // Handle registration error (e.g., display error message)
+      }
+    } catch (error) {
       setIsAlertSuccess(false);
+      // Handle network error
+    } finally {
       setIsAlertVisible(true);
     }
   };
+
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>

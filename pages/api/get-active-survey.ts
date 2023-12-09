@@ -1,4 +1,8 @@
 import { sql } from '@vercel/postgres';
+//@ts-ignore
+import jwt from 'jsonwebtoken';
+//@ts-ignore
+import cookie from 'cookie';
 
 //@ts-ignore
 export default async function handler(req, res) {
@@ -8,6 +12,19 @@ export default async function handler(req, res) {
   }
 
   try {
+    const cookies = cookie.parse(req.headers.cookie || '');
+    const token = cookies.token_user;
+    if (!token) throw new Error('No token provided');
+
+    // Verify the token and extract the payload
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { user_id, valid } = decoded;
+
+    // Check if the token's valid flag is false
+    if (!valid) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     // Fetch the active survey from the database
     const formResult = await sql`SELECT * FROM forms WHERE active = true LIMIT 1;`;
     const survey = formResult.rows[0];

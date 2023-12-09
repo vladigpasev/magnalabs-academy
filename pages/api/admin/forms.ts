@@ -29,7 +29,16 @@ export default async function handler(req, res) {
 
   try {
     // Fetch forms from the database
-    const { rows } = await sql`SELECT * FROM forms;`;
+    const { rows } = await sql`
+    SELECT * FROM forms 
+    ORDER BY 
+        CASE 
+            WHEN active = true THEN 0 
+            ELSE 1 
+        END, 
+        formid desc;
+`;
+
     res.status(200).json(rows);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });

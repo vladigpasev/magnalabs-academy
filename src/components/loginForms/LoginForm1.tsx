@@ -1,77 +1,63 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import TranslatorContext from '../../modules/translator/TranslatorContext';
-import UserContext, {User} from "../../modules/user/UserContext";
-import UserProvider from '../../modules/user/UserProvider';
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import Firestore from "../../modules/firebase/Firestore";
+import Router from 'next/router';
+import axios from 'axios';
 
 const LoginForm1: FC = () => {
   const translator = useContext(TranslatorContext);
-  const { setUser } = useContext(UserContext);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [isAlertSuccess, setIsAlertSuccess] = useState(false);
-  const handleSubmit = (event: any) => {
+
+  useEffect(() => {
+    axios
+      .get('/api/authenticated')
+      .then((response) => {
+        if (!response.data.authenticated) {
+          return;
+        } else {
+          if (!response.data.valid) {
+            Router.push('/register');
+          } else {
+            Router.push('/');
+          }
+        }
+      })
+      .catch(() => {return;});
+  }, []);
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (
-      UserProvider.getUsernames().includes(username) &&
-      password === 'magna'
-    ) {
-      setIsAlertSuccess(true);
-      setIsAlertVisible(true);
-      setTimeout(() => {
-        const docRef = doc(Firestore, "users", username);
-        getDoc(docRef).then((docSnap) => {
-          if (docSnap.exists()) {
-            const user = docSnap.data();
-            if (
-              'firstName' in user &&
-              'lastName' in user &&
-              'email' in user &&
-              'phone' in user &&
-              'city' in user &&
-              'pharmacy' in user &&
-              'uid' in user
-            ) {
-              setUser({
-                username: user.username,
-                password: user.password,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                phone: user.phone,
-                city: user.city,
-                pharmacy: user.pharmacy,
-                uid: user.uid,
-              });
-            }
-            else {
-              setUser({
-                username: user.username,
-                password: user.password,
-              });
-            }
-          }
-          else {
-            const newUser: User = {
-              username,
-              password,
-            };
-            setDoc(doc(Firestore, "users", username), newUser, {
-              merge: true,
-            }).then(() => {
-              setUser(newUser)
-            });
-          }
-        });
-      }, 3000);
-    }
-    else {
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json(); // Parse JSON response
+        if (data.valid) {
+          Router.push('/'); // Redirect to root if valid is true
+        } else {
+          Router.push('/register'); // Redirect to register if valid is false
+        }
+        setIsAlertSuccess(true);
+      } else {
+        setIsAlertSuccess(false);
+        // Handle login error
+      }
+    } catch (error) {
       setIsAlertSuccess(false);
+      // Handle network error
+    } finally {
       setIsAlertVisible(true);
     }
   };
+
 
   return (
     <form className="contact-form" onSubmit={handleSubmit}>

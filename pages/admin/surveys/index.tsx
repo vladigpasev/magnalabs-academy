@@ -29,31 +29,38 @@ export default function Admin() {
       console.error('Error fetching forms', error);
     }
   };
+/*@ts-ignore*/
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+  };
 
   return (
     <div>
       <Navbar />
-      {/* Render the forms here */}
-        <div >
+        <div>
             <Link href="/admin/surveys/new"><div className='btn btn-primary rounded mt-2'>New Form</div></Link>
           <div className="overflow-x-auto">
             <table className="table">
               <thead>
                 <tr>
-                  <th></th>
+                  <th>Id</th>
                   <th>Title</th>
-                  <th></th>
+                  <th>Created at</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 {forms.map((form, index) => (
-                    /* @ts-ignore */
-                  <tr key={form.id} className={form.active ? "bg-base-200" : ""}>
-                    <th>{index + 1}</th>
-                    {/* @ts-ignore */}
+                  /*@ts-ignore*/
+                  <tr key={form.formid} className={form.active ? "bg-base-200" : ""}>
+                    {/*@ts-ignore*/}
+                    <th>{form.formid}</th>
+                    {/*@ts-ignore*/}
                     <td>{form.title}</td>
-                    {/* @ts-ignore */}
+                    {/*@ts-ignore*/}
+                    <td>{formatDate(form.createddate)}</td>
+                    {/*@ts-ignore*/}
                     <td><Link className='link' href={`/admin/surveys/${form.formid}`}>View more</Link></td>
                   </tr>
                 ))}

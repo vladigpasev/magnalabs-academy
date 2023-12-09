@@ -12,9 +12,6 @@ export default function Login() {
         <div className="card">
           <div className="card-body p-7 p-lg-11 text-center">
             <LoginForm1/>
-            <p className="mb-0">
-              <NextLink title={translator.t('seo./reset-password.title')} href="/reset-password" className="hover" />
-            </p>
           </div>
         </div>
       </div>

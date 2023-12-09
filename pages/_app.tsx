@@ -18,12 +18,8 @@ import 'plyr-react/plyr.css';
 import 'glightbox/dist/css/glightbox.css';
 import 'plugins/scrollcue/scrollCue.css';
 import Seo from '../src/modules/seo/Seo';
-import UserContext, { isUserValid, User } from "../src/modules/user/UserContext";
 import PageProgress from "../src/components/common/PageProgress";
 import useProgressbar from "../src/hooks/useProgressbar";
-import SurveyDataContext, { SurveyData } from "../src/modules/surveyData/SurveyDataContext";
-import { doc, getDoc } from "firebase/firestore";
-import Firestore from "../src/modules/firebase/Firestore";
 
 if (typeof window !== 'undefined') {
   (() => {
@@ -60,52 +56,14 @@ if (typeof window !== 'undefined') {
 }
 
 const defaultTranslator = new Translator();
-const USER_STORAGE_KEY = 'USER';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useProgressbar();
   const router = useRouter();
   const { pathname, locale } = router;
   const [translator, setTranslator] = useState<Translator>(defaultTranslator);
-  const [user, setUser] = useState<User | null>(null);
-  const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
 
-  const logOut = () => {
-    localStorage.removeItem(USER_STORAGE_KEY);
-    setUser(null);
-  };
-
-  useEffect(() => {
-    const userAsJsonFromStorage = localStorage.getItem(USER_STORAGE_KEY);
-    if (userAsJsonFromStorage !== null) {
-      const user = JSON.parse(userAsJsonFromStorage);
-      setUser(user);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-  }, [user]);
-
-  const isAdminPath = (path: string) => path.startsWith('/admin/');
-
-  useEffect(() => {
-    // Helper function to check if the current path is under /admin
-    const isAdminPath = (path: string) => path.startsWith('/admin') || path === '/admin';
-
-    const publicPaths = ['/login', '/reset-password'];
-    const isPublicPath = publicPaths.includes(pathname);
-    const isUnprotectedAdminPath = isAdminPath(pathname);
-
-    const shouldRedirectToLogin = !user && !isPublicPath && !isUnprotectedAdminPath;
-    const shouldRedirectToHome = user && isPublicPath;
-
-    if (shouldRedirectToLogin) {
-      router.push('/login');
-    } else if (shouldRedirectToHome) {
-      router.push('/');
-    }
-  }, [user, pathname]);
+  
 
   useEffect(() => {
     const newTranslator = new Translator();
@@ -113,18 +71,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     setTranslator(newTranslator);
   }, [locale]);
 
-  useEffect(() => {
-    const docRef = doc(Firestore, "surveyData", "active");
-    getDoc(docRef).then((docSnap) => {
-      if (docSnap.exists()) {
-        const newSurveyData = docSnap.data();
-        setSurveyData({
-          activeSurveyId: newSurveyData.activeSurveyId,
-          surveys: newSurveyData.surveys,
-        });
-      }
-    });
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -137,9 +83,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const seo = new Seo(translator, router);
 
   return (
-    <UserContext.Provider value={{ user, setUser, logOut }}>
       <TranslatorContext.Provider value={translator}>
-        <SurveyDataContext.Provider value={{ surveyData, setSurveyData }}>
           <Fragment>
             <Head>
               <meta charSet="utf-8" />
@@ -167,11 +111,11 @@ function MyApp({ Component, pageProps }: AppProps) {
                           {/* Conditional rendering based on path */}
                         </div>
                         <h1 className="display-1">{translator.t(`seo.${pathname}.title`)}</h1>
-                        {user !== null ? (
+                        {/* {user !== null ? (
                           <button className="btn btn-sm btn-outline-danger rounded-pill mt-3" onClick={logOut}>
                             {translator.t('words.logOut')}
                           </button>
-                        ) : null}
+                        ) : null} */}
                       </div>
                     </div>
                   </div>
@@ -185,9 +129,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               </main>
             </ThemeProvider>
           </Fragment>
-        </SurveyDataContext.Provider>
       </TranslatorContext.Provider>
-    </UserContext.Provider>
   );
 }
 

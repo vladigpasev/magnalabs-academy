@@ -55,9 +55,6 @@ export default function Navbar() {
                 </ul>
               </details>
             </li> */}
-          <li>
-            <Link href="/admin/users">Users</Link>
-          </li>
         </ul>
       </div>
     </div>

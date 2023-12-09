@@ -1,6 +1,5 @@
 import { FC, useEffect, useState, useContext } from "react";
 import axios from 'axios';
-import UserContext from '../../modules/user/UserContext';
 
 interface SurveyQuestion {
   questionid: number;
@@ -15,10 +14,19 @@ interface Survey {
   questions: SurveyQuestion[];
 }
 
-const SurveyForm1: FC<{ className?: string }> = ({ className = '' }) => {
-  const { user } = useContext(UserContext);
+interface SurveyForm1Props {
+  className?: string;
+  userId: string; // assuming userId is a string, adjust the type as needed
+}
+
+
+const SurveyForm1: FC<SurveyForm1Props> = ({ className = '', userId }) => {
   const [activeSurvey, setActiveSurvey] = useState<Survey | null>(null);
   const [answers, setAnswers] = useState<{ [questionId: string]: any }>({});
+  const [submissionStatus, setSubmissionStatus] = useState({
+    success: false,
+    message: ''
+  });
 
   useEffect(() => {
     axios.get('/api/get-active-survey')
@@ -101,25 +109,35 @@ const SurveyForm1: FC<{ className?: string }> = ({ className = '' }) => {
         return null;
     }
   };
+  const clearForm = () => {
+    const clearedAnswers = Object.keys(answers).reduce((acc, questionId) => ({
+      ...acc,
+      [questionId]: null,
+    }), {});
+    setAnswers(clearedAnswers);
+  };
+
 /*@ts-ignore*/
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!user || !activeSurvey) {
+    if (!userId || !activeSurvey) {
       console.error('Submission failed: User or Survey not defined');
       return;
     }
 
     try {
       const submissionData = {
-        userId: user.uid, // Replace with actual user identification logic
+        userId: userId,
         formId: activeSurvey.formid,
         answers
       };
 
       await axios.post('/api/submit-form', submissionData);
-      // Handle submission success, like showing a confirmation message or redirecting
+      setSubmissionStatus({ success: true, message: 'Успешно подадохте формата!' });
+      clearForm();
     } catch (error) {
       console.error('Error submitting form:', error);
+      setSubmissionStatus({ success: false, message: 'Възникна грешка' });
     }
   };
 
@@ -129,6 +147,11 @@ const SurveyForm1: FC<{ className?: string }> = ({ className = '' }) => {
 
   return (
     <form onSubmit={handleSubmit} className={`row ${className}`}>
+      {submissionStatus.success && (
+        <div className="alert alert-success" role="alert">
+          {submissionStatus.message}
+        </div>
+      )}
       {activeSurvey.questions.map((question, index) => (
         <div key={question.questionid} className="col-12">
           <label htmlFor={`question-${question.questionid}`}>
@@ -139,7 +162,7 @@ const SurveyForm1: FC<{ className?: string }> = ({ className = '' }) => {
         </div>
       ))}
       <div className="col-12 text-center">
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary">Подай</button>
       </div>
     </form>
   );
